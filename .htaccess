@@ -1,0 +1,6 @@
+ RewriteEngine On
+ RewriteBase /homescapes
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond $1 !^(index\.php|images|robots\.txt|css|docs|js|system)
+  RewriteRule ^(.*)$ /homescapes/index.php?/$1 [L]
