@@ -3,14 +3,14 @@ class Costcalculator_model extends CI_Model {
   
 
 
- public function getcostprice(){
+ /* public function getcostprice(){
  	$this->db->select('*');
 	$this->db->from('cost_calculators');
 	$this->db->join('purchase_prices', 'purchase_prices.item_sku = cost_calculators.linnworks_code');
 	$this->db->join('admin_listings', 'admin_listings.linnworks_code = cost_calculators.linnworks_code');
 	$query = $this->db->get();
 	 return $query->result();		 
- }
+ }*/
 
 	 public function show_costcalculate_id($code){
 		$this->db->select('*');
@@ -31,6 +31,23 @@ class Costcalculator_model extends CI_Model {
            $this->db->where("id", $id);  
            $this->db->update("cost_calculators", $data);            
       }  
+
+ 
+       public function total_list($limit,$offset){
+	 			 $this->db->select("*");
+	  			 $this->db->from('cost_calculators');
+				$this->db->join('purchase_prices', 'purchase_prices.item_sku = cost_calculators.linnworks_code');
+				$this->db->join('admin_listings', 'admin_listings.linnworks_code = cost_calculators.linnworks_code');
+	  			$this->db->limit($limit,$offset);
+	  			$query = $this->db->get();
+	  			return $query->result();
+ 		}
+
+
+		 public function alllist(){
+		  return $this->db->count_all_results('cost_calculators');
+		 }
+		 
 
 
 

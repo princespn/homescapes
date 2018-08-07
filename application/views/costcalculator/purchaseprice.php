@@ -65,10 +65,10 @@
                 <?php }?>  
             </tbody>
           </table>
-
-          <?php //echo '<div class="pagination">'.$this->pagination->create_links().'</div>'; ?>
-
+  <div class="row">
+    <div class="col-md-12">
+    <div class="row"><?php echo $this->pagination->create_links(); ?></div> 
+     </div>
+  </div>
       </div>
-    </div>
-   
-    
+    </div> 
