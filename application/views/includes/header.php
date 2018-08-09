@@ -23,6 +23,7 @@
   <div class="container-fluid">    
     <ul class="nav navbar-nav">
     	<li class="active"><a href="<?= base_url('costcalculator') ?>">Home</a></li>
+    	<li><a href="<?= base_url('mainlisting') ?>">Main Listing</a></li>
     	<?php if (isset($_SESSION['username']) && $_SESSION['logged_in'] === true) : ?>
 			<li ><a href="<?= base_url('admin/signup') ?>">Add User</a></li>
 			<li><a href="<?= base_url('admin/logout') ?>">Logout</a></li>

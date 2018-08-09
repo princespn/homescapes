@@ -30,7 +30,7 @@ class Processed extends CI_Controller {
 
 public function create_data(){
 
-	ini_set('display_errors', 'Off');
+	//error_reporting(0);
 
 		$data['title'] = 'Linnworks Processed Orders.';
 
@@ -53,7 +53,7 @@ public function create_data(){
         $adjacents = 12088;
         $total = 604373;
         $targetpage = ""; //your file name
-        $limit = 200; //how many items to show per page
+        $limit = 200;  //how many items to show per page
         //$page = isset($_GET['page']);
         $counter = 0;
 
@@ -151,49 +151,56 @@ public function create_data(){
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         $result = curl_exec($ch);
         $orders = json_decode($result);
-        $data['Neworders'] = json_decode($result);
-    
+    //print_r($orders); die();
+        $data['Neworders'] = json_decode($result);    
         curl_close($ch);
+
+        //  $this->set(compact('orders','pagination'));
+            $this->load->view('includes/header');
+            $this->load->view('processed/create', $data);
+            $this->load->view('includes/footer');
+
+
        
-            if (!empty($orders)) {
-                foreach ($orders as $order){
+    if (!empty($orders)) {
+        foreach ($orders as $order){
                    
-for ($i = 0;$i<=COUNT($order->Items); $i++) {
-      //print_r($order->Items[$i]->SKU); //die();
-    $days = strtotime($order->GeneralInfo->ReceivedDate);
-    $this_week_sd = date("Y-m-d",$days);    
+            for ($i = 0;$i<=COUNT($order->Items); $i++) {
+                    //print_r($order->Items[$i]->SKU); //die();
+                             $days = strtotime($order->GeneralInfo->ReceivedDate);
+                             $this_week_sd = date("Y-m-d",$days);    
 
     	 	
-	if(($order->GeneralInfo->Source === 'DATAIMPORTEXPORT') && ($order->GeneralInfo->SubSource === 'Daily Mail')){$smart_orderid = "DMail10".$order->GeneralInfo->ExternalReferenceNum;}else {$smart_orderid = $order->GeneralInfo->ExternalReferenceNum;}
-			 	if((!empty($smart_orderid)) && (!empty($order->Items[$i]->SKU))){
+	               if(($order->GeneralInfo->Source === 'DATAIMPORTEXPORT') && ($order->GeneralInfo->SubSource === 'Daily Mail')){$smart_orderid = "DMail10".$order->GeneralInfo->ExternalReferenceNum;}else {$smart_orderid = $order->GeneralInfo->ExternalReferenceNum;}
+
+			 	       if((!empty($smart_orderid)) && (!empty($order->Items[$i]->SKU))){
 			    
 						    $saveAll = array('order_id' => $smart_orderid,'order_date' => $this_week_sd,  'currency' => $order->TotalsInfo->Currency, 'plateform' => $order->GeneralInfo->Source,'subsource' => $order->GeneralInfo->SubSource, 'product_sku' => $order->Items[$i]->SKU, 'cat_name' => $order->Items[$i]->CategoryName, 'product_name' => $order->Items[$i]->Title, 'quantity' =>  $order->Items[$i]->Quantity, 'price_per_product' => $order->Items[$i]->CostIncTax);
 
 						     $this->Processed_model->savelisting_data($saveAll);
-			 			}
-    } 
+			 			  }
+                } 
 
-  	$days = strtotime($order->GeneralInfo->ReceaivedDate);
-    $this_week_sd = date("Y-m-d",$days);
+                  	
+                        $days = strtotime($order->GeneralInfo->ReceivedDate);
+                        $this_week_sd = date("Y-m-d",$days); 
 
-	  if(($order->GeneralInfo->Source === 'DATAIMPORTEXPORT') && ($order->GeneralInfo->SubSource === 'Daily Mail')){$smart_orderid = "DMail10".$order->GeneralInfo->ExternalReferenceNum;}else {$smart_orderid = $order->GeneralInfo->ExternalReferenceNum;}
+	               if(($order->GeneralInfo->Source === 'DATAIMPORTEXPORT') && ($order->GeneralInfo->SubSource === 'Daily Mail')){$smart_orderid = "DMail10".$order->GeneralInfo->ExternalReferenceNum;}else {$smart_orderid = $order->GeneralInfo->ExternalReferenceNum;}
 	
 	
-	   //$ordervalue = (($order->TotalsInfo->TotalCharge)-($order->TotalsInfo->Tax));
-   $ordervalue = $order->TotalsInfo->TotalCharge;
-	   			if(!empty($smart_orderid)) {
+	               //$ordervalue = (($order->TotalsInfo->TotalCharge)-($order->TotalsInfo->Tax));
+                      $ordervalue = $order->TotalsInfo->TotalCharge;
+	   			        if(!empty($smart_orderid)) {
 					   $data = array('order_id' => $smart_orderid, 'currency' => $order->TotalsInfo->Currency, 'plateform' => $order->GeneralInfo->Source,'subsource' => $order->GeneralInfo->SubSource,'order_date' => $this_week_sd,'order_value' => $ordervalue);
 					  	 $this->Processed_model->inser_data($data);
-	  				}
+	  	 }
     
     }
-      //  $this->set(compact('orders','pagination'));
-    		$this->load->view('includes/header');
-			$this->load->view('processed/create', $data);
-			$this->load->view('includes/footer');
+      
 
             
     }
+    
 
 		
 }	

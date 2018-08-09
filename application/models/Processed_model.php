@@ -38,9 +38,9 @@ public function gettoken() {
         $some_data = array('token' => $userkey);
 
     
-		$from = '2018-01-01T00:00:00'; //min
+		$from = '2018-07-01T00:00:00'; //min
 		//$from = '';   // 2017-04-03 - TO - 2017-04-09
-		$to =  '2018-07-31T60:60:60'; //max
+		$to =  '2018-08-08T60:60:60'; //max
 		//$to = '';
         
 		$datetype = '1';
@@ -75,12 +75,32 @@ public function gettoken() {
 
     public function inser_data($data){ 
        	
-    	return $this->db->insert('processed_orders', $data);
+    	$query = $this->db->get_where('processed_listings', array('order_id' => $data['order_id']));
+			if ($query->num_rows() == 0) 
+			{
+
+			  return $this->db->insert('processed_listings', $data);			  
+			}
+			else 
+			{
+			  return false;
+			}	
 	}
 
-	public function savelisting_data($saveAll){		
+	public function savelisting_data($saveAll){	
 
-		return $this->db->insert('processed_listings', $saveAll);
+	$query = $this->db->get_where('processed_listings', array('order_id' => $saveAll['order_id']));
+			if ($query->num_rows() == 0) 
+			{
+
+			  return $this->db->insert('processed_listings', $saveAll);			  
+			}
+			else 
+			{
+			  return false;
+			}	
+
+		
 
 	}
 
