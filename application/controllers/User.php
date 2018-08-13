@@ -77,7 +77,18 @@ class User extends CI_Controller {
 				$_SESSION['is_confirmed'] = (bool)$user->is_confirmed;
 				$_SESSION['is_admin']     = (bool)$user->is_admin;
 				
-				$data = array('username' => $user->username,'email' => $user->email);
+				//print_r($user->username); die();
+				
+				if($this->session->userdata('username') ==='admin'){
+			 	 $query = $this->User_model->getallusers();
+			 	  //print_r($query); die();
+			 	 //$data['Users'] = null;
+			 	 $data['Users'] =  $query;
+			 	 }else{
+			$data = array('username' => $user->username,'email' => $user->email);
+
+			 	 }
+				
 				$this->load->view('includes/header');
 				$this->load->view('admin/user_list', $data);
 				$this->load->view('includes/footer');
@@ -130,7 +141,23 @@ class User extends CI_Controller {
 			$password = $this->input->post('password');
 			
 			if ($this->User_model->create_user($username, $email, $password)) {
-				$data['title'] = 'Please.'; 
+
+				$user_id = $this->User_model->get_user_id_from_username($username);
+				$user    = $this->User_model->get_user($user_id);
+
+
+			
+						  	
+
+			 	 if($this->session->userdata('username') ==='admin'){
+			 	 $query = $this->User_model->getallusers();
+
+			 	 $data['Users'] =  $query;
+			 	 }else{
+	$data = array('username' => $user->username,'email' => $user->email);
+
+			 	 }
+
 				$this->load->view('includes/header');
 				$this->load->view('admin/user_list', $data);
 				$this->load->view('includes/footer');

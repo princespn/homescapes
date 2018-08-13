@@ -49,11 +49,22 @@ class User_model extends CI_Model {
 	}
 	
 	public function get_user($user_id) {
-		
+
 		$this->db->from('users');
 		$this->db->where('id', $user_id);
 		return $this->db->get()->row();
 		
+	}
+
+
+	public function getallusers(){
+
+		$this->db->select('*');
+		$this->db->from('users');
+		$query = $this->db->get();
+	  	return $query->result();
+
+
 	}
 	
 	

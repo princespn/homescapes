@@ -1,4 +1,7 @@
-
+<?php if ($this->session->userdata('username') === NULL):
+      redirect('user/login');
+      endif;
+?>  
 <div class="container">
 	<div class="row">
 		<?php if (validation_errors()) : ?>
